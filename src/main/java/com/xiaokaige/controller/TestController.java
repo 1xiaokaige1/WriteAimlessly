@@ -2,6 +2,7 @@ package com.xiaokaige.controller;
 
 import com.xiaokaige.annotataion.SwaggerNotes;
 import com.xiaokaige.dao.StudentMapper;
+import com.xiaokaige.enums.LoginSubCode;
 import com.xiaokaige.enums.TestSubCode;
 import com.xiaokaige.queryParam.UserParam;
 import com.xiaokaige.response.ResponseInfo;
@@ -31,8 +32,18 @@ public class TestController {
     @ApiResponses(@ApiResponse(response = StudentVO.class, code = 200, message = "ok"))
     @PostMapping("/test")
     public ResponseInfo<StudentVO> test01(@Valid @RequestBody UserParam userParam) {
-       StudentVO studentVO = studentMapper.findStudentByIdTwo(userParam.getUserId());
-       return ResponseInfo.ok(studentVO,TestSubCode.TEST_SUB_CODE_ONE);
+        StudentVO studentVO = studentMapper.findStudentByIdTwo(userParam.getUserId());
+        return ResponseInfo.ok(studentVO, TestSubCode.TEST_SUB_CODE_ONE);
+    }
+
+    @SwaggerNotes(subCodeType = LoginSubCode.class, codeType = {"AC001"}, tip = "测试用户登录接口")
+    @PostMapping("/login")
+    public ResponseInfo<Void> testLogin(@Valid @RequestBody UserParam userParam) {
+        StudentVO studentVO = studentMapper.findStudentByIdTwo(userParam.getUserId());
+        if (studentVO != null) {
+            return ResponseInfo.ok(LoginSubCode.LOGIN_SUCCESS_CODE);
+        }
+        return ResponseInfo.ok(LoginSubCode.LOGIN_FAILURE_CODE);
     }
 
 }

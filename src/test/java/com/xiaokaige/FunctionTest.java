@@ -1,5 +1,6 @@
 package com.xiaokaige;
 
+import com.xiaokaige.compare.StudentComparator;
 import com.xiaokaige.entity.StudentDO;
 import com.xiaokaige.predicate.TestConstructPredicate;
 import com.xiaokaige.predicate.TestFunction;
@@ -7,12 +8,9 @@ import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author zengkai
@@ -55,13 +53,13 @@ public class FunctionTest {
     }
 
     @Test
-    public void test03(){
+    public void test03() {
         int[] arr = {2, 5, 3, 1, 1};
         for (int i = 0; i < arr.length; i++) {
             int index = i;
             int min = arr[index];
             for (int j = i; j < arr.length; j++) {
-                if(min > arr[j]){
+                if (min > arr[j]) {
                     min = arr[j];
                     index = j;
                 }
@@ -89,7 +87,7 @@ public class FunctionTest {
      * 利用函数式接口来实现行为参数化
      */
     @Test
-    public void test05(){
+    public void test05() {
         List<StudentDO> list = new ArrayList<>();
         StudentDO studentDO = new StudentDO();
         studentDO.setId(1L);
@@ -115,14 +113,93 @@ public class FunctionTest {
     }
 
     @Test
-    public void test06(){
-        TestConstructPredicate<Long,String,Integer,String, StudentDO> selfDefineTest = StudentDO::new;
+    public void test06() {
+        TestConstructPredicate<Long, String, Integer, String, StudentDO> selfDefineTest = StudentDO::new;
 
         StudentDO studentDO = selfDefineTest.apply(1L, "小陈", 24, "深圳市龙岗区");
 
         System.out.println(studentDO);
 
     }
+
+    @Test
+    public void test07() {
+        List<Integer> listOne = Arrays.asList(1, 2, 3);
+        List<Integer> listTwo = Arrays.asList(2, 4);
+
+        List<int[]> resultOne = listOne
+                .stream()
+                .flatMap(i -> listTwo.stream().map(j -> new int[]{i, j}))
+                .collect(Collectors.toList());
+        System.out.println("resultOne:" + resultOne);
+
+        List<int[]> resultTwo = listOne
+                .stream()
+                .flatMap(i -> listTwo.stream().filter(j -> (i + j) % 3 == 0).map(j -> new int[]{i, j}))
+                .collect(Collectors.toList());
+        System.out.println("resultTwo:" + resultTwo);
+    }
+
+    @Test
+    public void test08(){
+        List<StudentDO> list = new ArrayList<>();
+        StudentDO studentDOOne = new StudentDO(1L, "小曾", 24, "深圳市龙岗区");
+        StudentDO studentDOTwo = new StudentDO(2L, "小陈", 24, "深圳市南山区");
+        list.add(studentDOOne);
+        list.add(studentDOTwo);
+        List<StudentDO[]> studentResult = list
+                .stream()
+                .flatMap(studentDO -> list.stream().map(studentDOTemp -> new StudentDO[]{studentDO, studentDOTemp}))
+                .collect(Collectors.toList());
+        System.out.println(studentResult);
+    }
+
+    @Test
+    public void test09(){
+        List<StudentDO> list = new ArrayList<>();
+        StudentDO studentDOOne = new StudentDO(1L, "小曾", 24, "深圳市龙岗区");
+        StudentDO studentDOTwo = new StudentDO(2L, "小陈", 22, "深圳市南山区");
+        list.add(studentDOOne);
+        list.add(studentDOTwo);
+
+        list.sort(new StudentComparator());
+        System.out.println(list);
+
+        list.stream().findFirst().ifPresent(studentDO -> studentDO.setAddress("广州市天河区"));
+        System.out.println(list.get(0));
+
+        list.sort((Comparator.comparingInt(StudentDO::getAge)));
+        System.out.println(list);
+
+        Integer sum = list.stream().collect(Collectors.summingInt(StudentDO::getAge));
+        System.out.println(sum);
+    }
+
+    @Test
+    public void test10(){
+        List<StudentDO> list = new ArrayList<>();
+        StudentDO studentDOOne = new StudentDO(1L, "小曾", 24, "深圳市龙岗区");
+        StudentDO studentDOTwo = new StudentDO(2L, "小陈", 22, "深圳市南山区");
+        list.add(studentDOOne);
+        list.add(studentDOTwo);
+
+        String addressStr = list.stream().map(StudentDO::getAddress).collect(Collectors.joining("/"));
+        System.out.println(addressStr);
+    }
+
+    @Test
+    public void tes11(){
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(9);
+        list.add(2);
+        list.add(3);
+        Integer maxNumber = list.stream().reduce((a, b) -> a > b ? a : b).get();
+        System.out.println(maxNumber);
+    }
+
+
 
 
 }
