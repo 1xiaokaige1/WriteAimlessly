@@ -1,5 +1,6 @@
 package com.xiaokaige.controller;
 
+import com.xiaokaige.annotataion.EnableLogRecord;
 import com.xiaokaige.annotataion.SwaggerNotes;
 import com.xiaokaige.dao.StudentMapper;
 import com.xiaokaige.enums.LoginSubCode;
@@ -31,6 +32,7 @@ public class TestController {
     @SwaggerNotes(subCodeType = TestSubCode.class, codeType = {"A001"}, tip = "测试接口用例")
     @ApiResponses(@ApiResponse(response = StudentVO.class, code = 200, message = "ok"))
     @PostMapping("/test")
+    @EnableLogRecord(value = "测试接口用例")
     public ResponseInfo<StudentVO> test01(@Valid @RequestBody UserParam userParam) {
         StudentVO studentVO = studentMapper.findStudentByIdTwo(userParam.getUserId());
         return ResponseInfo.ok(studentVO, TestSubCode.TEST_SUB_CODE_ONE);
