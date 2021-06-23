@@ -1,5 +1,7 @@
 package com.xiaokaige.predicate;
 
+import java.util.function.Predicate;
+
 /**
  * @author zengkai
  * @date 2021/6/17 10:06

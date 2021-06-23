@@ -2,6 +2,7 @@ package com.xiaokaige.service;
 
 import com.xiaokaige.entity.StudentDO;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xiaokaige.vo.StudentVO;
 
 /**
  * <p>
@@ -12,5 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2021-06-15
  */
 public interface StudentService extends IService<StudentDO> {
+
+    StudentVO findSpecialStudent(String param);
 
 }

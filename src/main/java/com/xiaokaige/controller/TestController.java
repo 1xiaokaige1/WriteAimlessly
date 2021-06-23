@@ -4,9 +4,11 @@ import com.xiaokaige.annotataion.EnableLogRecord;
 import com.xiaokaige.annotataion.SwaggerNotes;
 import com.xiaokaige.dao.StudentMapper;
 import com.xiaokaige.enums.LoginSubCode;
+import com.xiaokaige.enums.TestCodeEnum;
 import com.xiaokaige.enums.TestSubCode;
 import com.xiaokaige.queryParam.UserParam;
 import com.xiaokaige.response.ResponseInfo;
+import com.xiaokaige.service.StudentService;
 import com.xiaokaige.vo.StudentVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
@@ -16,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.xml.ws.Response;
 
 /**
  * @author zengkai
@@ -28,6 +31,8 @@ public class TestController {
 
     @Autowired
     private StudentMapper studentMapper;
+    @Autowired
+    private StudentService studentService;
 
     @SwaggerNotes(subCodeType = TestSubCode.class, codeType = {"A001"}, tip = "测试接口用例")
     @ApiResponses(@ApiResponse(response = StudentVO.class, code = 200, message = "ok"))
@@ -47,5 +52,13 @@ public class TestController {
         }
         return ResponseInfo.ok(LoginSubCode.LOGIN_FAILURE_CODE);
     }
+
+    @GetMapping("/testuser/{param}")
+    public ResponseInfo<StudentVO> testMPApi(@PathVariable("param") String param){
+        StudentVO studentVO = studentService.findSpecialStudent(param);
+        return ResponseInfo.ok(studentVO, TestCodeEnum.TEST_SUCCESS_CODE);
+    }
+
+
 
 }

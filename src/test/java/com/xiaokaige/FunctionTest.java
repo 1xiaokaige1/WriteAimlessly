@@ -141,7 +141,7 @@ public class FunctionTest {
     }
 
     @Test
-    public void test08(){
+    public void test08() {
         List<StudentDO> list = new ArrayList<>();
         StudentDO studentDOOne = new StudentDO(1L, "小曾", 24, "深圳市龙岗区");
         StudentDO studentDOTwo = new StudentDO(2L, "小陈", 24, "深圳市南山区");
@@ -155,7 +155,7 @@ public class FunctionTest {
     }
 
     @Test
-    public void test09(){
+    public void test09() {
         List<StudentDO> list = new ArrayList<>();
         StudentDO studentDOOne = new StudentDO(1L, "小曾", 24, "深圳市龙岗区");
         StudentDO studentDOTwo = new StudentDO(2L, "小陈", 22, "深圳市南山区");
@@ -171,12 +171,12 @@ public class FunctionTest {
         list.sort((Comparator.comparingInt(StudentDO::getAge)));
         System.out.println(list);
 
-        Integer sum = list.stream().collect(Collectors.summingInt(StudentDO::getAge));
+        Integer sum = list.stream().mapToInt(StudentDO::getAge).sum();
         System.out.println(sum);
     }
 
     @Test
-    public void test10(){
+    public void test10() {
         List<StudentDO> list = new ArrayList<>();
         StudentDO studentDOOne = new StudentDO(1L, "小曾", 24, "深圳市龙岗区");
         StudentDO studentDOTwo = new StudentDO(2L, "小陈", 22, "深圳市南山区");
@@ -188,7 +188,7 @@ public class FunctionTest {
     }
 
     @Test
-    public void tes11(){
+    public void tes11() {
         List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
@@ -199,7 +199,34 @@ public class FunctionTest {
         System.out.println(maxNumber);
     }
 
+    @Test
+    public void test12() {
 
+        List<StudentDO> list = new ArrayList<>();
+        StudentDO studentDOOne = new StudentDO(1L, "小曾", 24, "深圳市龙岗区");
+        StudentDO studentDOTwo = new StudentDO(2L, "小陈", 22, "深圳市南山区");
+        list.add(studentDOOne);
+        list.add(studentDOTwo);
 
+        List<Long> userIds = list.stream()
+                .map(StudentDO::getId)
+                .collect(Collectors.toList());
+
+        System.out.println(userIds);
+    }
+
+    @Test
+    public void test13(){
+        List<StudentDO> list = new ArrayList<>();
+        StudentDO studentDOOne = new StudentDO(1L, "小曾", 24, "深圳市龙岗区");
+        StudentDO studentDOTwo = new StudentDO(2L, "小陈", 22, "深圳市南山区");
+        list.add(studentDOOne);
+        list.add(studentDOTwo);
+
+        Comparator<StudentDO> studentDOComparator = (Comparator.comparing(StudentDO::getAge));
+
+        list.sort(studentDOComparator);
+
+    }
 
 }

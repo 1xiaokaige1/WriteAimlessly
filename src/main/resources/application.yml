@@ -10,3 +10,7 @@ spring:
       password: root
 swagger:
   enabled: true
+rongcloud:
+  im:
+    appKey: lmxuhwagl6d3d
+    appSecret: 4kC8oxGLyhNA

@@ -2,16 +2,6 @@ package com.xiaokaige.aspect;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import javax.servlet.http.HttpServletRequest;
-
 import com.xiaokaige.annotataion.EnableLogRecord;
 import com.xiaokaige.entity.SystemLogDO;
 import com.xiaokaige.service.SystemLogService;
@@ -20,12 +10,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +20,14 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Aspect
 @Component
 public class WebLogAspect {
@@ -42,7 +35,7 @@ public class WebLogAspect {
     @Autowired
     private SystemLogService systemLogService;
 
-    ThreadLocal<Long> startTime = new ThreadLocal();
+    //ThreadLocal<Long> startTime = new ThreadLocal();
 
     public WebLogAspect() {
         if (logger.isDebugEnabled()) {
@@ -51,7 +44,7 @@ public class WebLogAspect {
 
     }
 
-    @Pointcut("execution(* com.xiaokaige.controller.*.*(..))")
+    @Pointcut("@annotation(com.xiaokaige.annotataion.EnableLogRecord)")
     public void webLog() {
     }
 
