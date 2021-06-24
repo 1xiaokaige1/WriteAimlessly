@@ -1,7 +1,6 @@
 package com.xiaokaige;
 
 import com.xiaokaige.entity.Dish;
-import io.swagger.models.auth.In;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -75,8 +74,34 @@ public class StreamTest {
     @Test
     public void test04() {
         //使用流进行数据拼接
-        String allDishNameStr = list.stream().map(Dish::getName).collect(Collectors.joining(","));
-        System.out.println(allDishNameStr);
+        /*String allDishNameStr = list.stream().map(Dish::getName).collect(Collectors.joining(","));
+        System.out.println(allDishNameStr);*/
+
+        /*boolean flag = list.stream().noneMatch(dish -> dish.getCalories() > 1000);
+        System.out.println("flag: " + flag);*/
+
+        /*Optional<Dish> optionResult = list.stream().filter(dish -> "meat".equals(dish.getName())).findAny();
+        optionResult.ifPresent(System.out::println);*/
+
+        /*Integer countResult = list.stream().map(Dish::getCalories).reduce(Integer::sum).get();
+        System.out.println("countResult: " + countResult);*/
+
+        /*Integer sumCalories = list.stream().map(Dish::getCalories).reduce(0, Integer::sum);
+        System.out.println("sumCalories: " + sumCalories );*/
+
+        /*int result = list.stream().mapToInt(Dish::getCalories).sum();
+        System.out.println("result: " + result);*/
+
+        OptionalInt maxData = list.stream().mapToInt(Dish::getCalories).max();
+        int realMaxData = maxData.orElse(1500);
+        System.out.println("realMaxData: " + realMaxData);
+
+        /*Dish dish = list.stream().reduce((a, b) -> a.getCalories() > b.getCalories() ? a : b).get();
+        System.out.println(dish);*/
+
+        List<Dish[]> list = this.list.stream().flatMap(i -> this.list.stream().map(j -> new Dish[]{i, j})).collect(Collectors.toList());
+        System.out.println(list);
+
     }
 
     @Test
