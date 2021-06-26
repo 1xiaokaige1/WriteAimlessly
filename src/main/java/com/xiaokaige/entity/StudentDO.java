@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 /**
@@ -25,6 +22,7 @@ import lombok.experimental.Accessors;
 @TableName("student")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class StudentDO implements Serializable {
 
     private static final long serialVersionUID = 1L;

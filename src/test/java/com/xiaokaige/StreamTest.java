@@ -1,6 +1,7 @@
 package com.xiaokaige;
 
 import com.xiaokaige.entity.Dish;
+import com.xiaokaige.entity.StudentDO;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -176,6 +177,5 @@ public class StreamTest {
         Integer resultTwo = f1.compose(f2).apply(1);
         System.out.println("resultTwo: " + resultTwo);
     }
-
 
 }

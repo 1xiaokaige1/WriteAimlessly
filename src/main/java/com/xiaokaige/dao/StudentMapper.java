@@ -3,6 +3,7 @@ package com.xiaokaige.dao;
 import com.xiaokaige.entity.StudentDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xiaokaige.vo.StudentVO;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 /**

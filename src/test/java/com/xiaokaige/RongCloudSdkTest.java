@@ -1,10 +1,15 @@
 package com.xiaokaige;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.xiaokaige.service.GroupInfoService;
 import com.xiaokaige.service.UserTokenService;
 import com.xiaokaige.utils.IdUtil;
 import io.rong.RongCloud;
+import io.rong.messages.BaseMessage;
+import io.rong.messages.TxtMessage;
+import io.rong.messages.UserInfo;
 import io.rong.methods.group.Group;
+import io.rong.methods.group.gag.Gag;
 import io.rong.methods.user.User;
 import io.rong.methods.user.blacklist.Blacklist;
 import io.rong.methods.user.block.Block;
@@ -12,6 +17,7 @@ import io.rong.methods.user.whitelist.Whitelist;
 import io.rong.models.Result;
 import io.rong.models.group.GroupMember;
 import io.rong.models.group.GroupModel;
+import io.rong.models.message.GroupMessage;
 import io.rong.models.response.*;
 import io.rong.models.user.UserModel;
 import org.junit.Before;
@@ -59,6 +65,8 @@ public class RongCloudSdkTest {
 
     private Group group;
 
+    private Gag gag;
+
     @Before
     public void before() {
         rongCloud = RongCloud.getInstance(appKey, appSecret);
@@ -67,6 +75,7 @@ public class RongCloudSdkTest {
         blackList = rongCloud.user.blackList;
         whitelist = new Whitelist(appKey, appSecret, rongCloud);
         group = rongCloud.group;
+        gag = rongCloud.group.gag;
     }
 
     /**
@@ -94,7 +103,7 @@ public class RongCloudSdkTest {
      */
     @Test
     public void test02() throws Exception {
-        UserModel userModel = new UserModel().setId("d46cbbba-1066-48d9-bd58-423c7b6b9505");
+        UserModel userModel = new UserModel().setId("1e0f106d-1495-419f-aa08-22eda17452b8");
         UserResult userResult = user.get(userModel);
         System.out.println("userResult: " + userResult);
     }
@@ -315,8 +324,17 @@ public class RongCloudSdkTest {
      */
     @Test
     public void test17() throws Exception {
-        GroupMember[] groupMembers = {new GroupMember().setId("d46cbbba-1066-48d9-bd58-423c7b6b9505")};
-        GroupModel groupModel = new GroupModel().setId("47531bf5-0391-446b-aa02-f7d5306bcb4a").setName("secret_garden").setMembers(groupMembers);
+        List<String> userIds = new ArrayList<>();
+        userIds.add("1e0f106d-1495-419f-aa08-22eda17452b8");
+        userIds.add("6b7ace87-af89-4296-a5e9-b68bb15a736c");
+        userIds.add("72f893ec-dfa5-4590-8947-6c43c3e3f1d2");
+        userIds.add("d46cbbba-1066-48d9-bd58-423c7b6b9505");
+        GroupMember[] groupMembers = userIds
+                .stream()
+                .map(id -> new GroupMember().setId(id))
+                .toArray(GroupMember[]::new);
+        //GroupMember[] groupMembers = {new GroupMember().setId("d46cbbba-1066-48d9-bd58-423c7b6b9505")};
+        GroupModel groupModel = new GroupModel().setId("47531bf5-0391-446b-aa02-f7d5306bcb4a").setName("happy_garden").setMembers(groupMembers);
         Result result = group.invite(groupModel);
         System.out.println("result: " + result);
     }
@@ -346,6 +364,52 @@ public class RongCloudSdkTest {
         groupInfoService.updateGroupInfo(groupId,groupName);
         System.out.println("result: " + result);
     }
+
+    /**
+     * 禁言群成员
+     * @throws Exception
+     */
+    @Test
+    public void test20() throws Exception {
+        List<String> userIds = new ArrayList<>();
+        userIds.add("1e0f106d-1495-419f-aa08-22eda17452b8");
+        userIds.add("6b7ace87-af89-4296-a5e9-b68bb15a736c");
+        GroupMember[] groupMembers = userIds
+                .stream()
+                .map(userId -> new GroupMember().setId(userId))
+                .toArray(GroupMember[]::new);
+        GroupModel groupModel = new GroupModel().setId("47531bf5-0391-446b-aa02-f7d5306bcb4a").setMembers(groupMembers).setMinute(60);
+        Result result = gag.add(groupModel);
+        System.out.println("result: " + result);
+    }
+
+    /**
+     * 查询群组被禁言用户
+     * @throws Exception
+     */
+    @Test
+    public void test21() throws Exception {
+        ListGagGroupUserResult resultList = gag.getList("47531bf5-0391-446b-aa02-f7d5306bcb4a");
+        System.out.println("resultList: " + resultList);
+    }
+
+    @Test
+    public void test22() throws Exception {
+        GroupMessage groupMessage = new GroupMessage();
+        groupMessage.setSenderId("1e0f106d-1495-419f-aa08-22eda17452b8");
+        groupMessage.setTargetId(new String[]{"47531bf5-0391-446b-aa02-f7d5306bcb4a"});
+        groupMessage.setObjectName("RC:TxtMsg");
+        UserInfo userInfo = new UserInfo("1e0f106d-1495-419f-aa08-22eda17452b8", "yangkeke", "http://www.rongcloud.cn/images/logo.png", "");
+        TxtMessage txtMessage = new TxtMessage("hello", "", userInfo);
+        groupMessage.setContent(txtMessage);
+        io.rong.methods.message.group.Group group = new io.rong.methods.message.group.Group(appKey, appSecret);
+        group.setRongCloud(rongCloud);
+        ResponseResult result = group.send(groupMessage);
+        System.out.println("result: " + result);
+    }
+
+
+
 
 
 
