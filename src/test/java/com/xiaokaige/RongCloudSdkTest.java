@@ -1,5 +1,6 @@
 package com.xiaokaige;
 
+import cn.hutool.crypto.digest.MD5;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.xiaokaige.service.GroupInfoService;
 import com.xiaokaige.service.UserTokenService;
@@ -25,10 +26,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -43,6 +47,8 @@ public class RongCloudSdkTest {
     private UserTokenService userTokenService;
     @Autowired
     private GroupInfoService groupInfoService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * appKey
@@ -190,6 +196,7 @@ public class RongCloudSdkTest {
 
     /**
      * 移除用户黑名单中的用户
+     *
      * @throws Exception
      */
     @Test
@@ -209,6 +216,7 @@ public class RongCloudSdkTest {
 
     /**
      * 添加用户白名单列表
+     *
      * @throws Exception
      */
     @Test
@@ -229,6 +237,7 @@ public class RongCloudSdkTest {
 
     /**
      * 获取用户白名单列表
+     *
      * @throws Exception
      */
     @Test
@@ -240,6 +249,7 @@ public class RongCloudSdkTest {
 
     /**
      * 删除用户白名单列表
+     *
      * @throws Exception
      */
     @Test
@@ -258,6 +268,7 @@ public class RongCloudSdkTest {
 
     /**
      * 创建群组
+     *
      * @throws Exception
      */
     @Test
@@ -283,6 +294,7 @@ public class RongCloudSdkTest {
 
     /**
      * 获取群组成员
+     *
      * @throws Exception
      */
     @Test
@@ -294,6 +306,7 @@ public class RongCloudSdkTest {
 
     /**
      * 加入群组
+     *
      * @throws Exception
      */
     @Test
@@ -341,6 +354,7 @@ public class RongCloudSdkTest {
 
     /**
      * 解散群组
+     *
      * @throws Exception
      */
     @Test
@@ -353,6 +367,7 @@ public class RongCloudSdkTest {
 
     /**
      * 更新群组信息
+     *
      * @throws Exception
      */
     @Test
@@ -361,12 +376,13 @@ public class RongCloudSdkTest {
         String groupName = "happy_garden";
         GroupModel groupModel = new GroupModel().setId(groupId).setName(groupName);
         Result result = group.update(groupModel);
-        groupInfoService.updateGroupInfo(groupId,groupName);
+        groupInfoService.updateGroupInfo(groupId, groupName);
         System.out.println("result: " + result);
     }
 
     /**
      * 禁言群成员
+     *
      * @throws Exception
      */
     @Test
@@ -385,6 +401,7 @@ public class RongCloudSdkTest {
 
     /**
      * 查询群组被禁言用户
+     *
      * @throws Exception
      */
     @Test
@@ -408,9 +425,20 @@ public class RongCloudSdkTest {
         System.out.println("result: " + result);
     }
 
+    @Test
+    public void test23() {
+        Map<String, List<String>> map = new HashMap<>();
+        List<String> listOne = new ArrayList<>();
+        listOne.add("1");
+        listOne.add("2");
+        map.put("one", listOne);
+        redisTemplate.opsForHash().putAll("userOne", map);
+
+        Map<String,List<String>> mapResult = redisTemplate.opsForHash().entries("userOne");
+        System.out.println(mapResult);
 
 
-
+    }
 
 
 }

@@ -1,10 +1,17 @@
 package com.xiaokaige;
 
+import cn.hutool.crypto.digest.MD5;
+import com.xiaokaige.config.StlConfig;
 import com.xiaokaige.entity.Dish;
-import com.xiaokaige.entity.StudentDO;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -13,9 +20,15 @@ import java.util.stream.Collectors;
  * @author zengkai
  * @date 2021/6/18 14:02
  */
+@SpringBootTest
+@RunWith(SpringRunner.class)
 public class StreamTest {
 
+
     private List<Dish> list;
+
+    @Autowired
+    private StlConfig stlConfig;
 
     @Before
     public void before() {
@@ -176,6 +189,20 @@ public class StreamTest {
 
         Integer resultTwo = f1.compose(f2).apply(1);
         System.out.println("resultTwo: " + resultTwo);
+    }
+
+    @Test
+    public void test10() {
+        String flag = stlConfig.getFlag();
+        String timestampStr = DateTimeFormatter
+                .ofPattern("yyyyMMddHHmmssS")
+                .format(LocalDateTime.now());
+        MD5 md5 = new MD5();
+        String encodeStr = md5.digestHex16(timestampStr);
+        Random random = new Random();
+        int randomNum = random.nextInt(90) + 10;
+        String uid = flag + encodeStr + randomNum;
+        System.out.println("生成的融云id: " + uid);
     }
 
 }

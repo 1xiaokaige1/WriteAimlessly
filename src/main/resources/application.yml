@@ -14,6 +14,9 @@ rongcloud:
   im:
     appKey: c9kqb3rdc6thj
     appSecret: OPxgxvq7ZqT3
+stl:
+  project:
+    flag: hk
 
 
 
