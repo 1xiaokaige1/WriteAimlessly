@@ -1,15 +1,24 @@
 package com.xiaokaige;
 
 import com.xiaokaige.entity.StudentDO;
+import com.xiaokaige.generatorid.GeneratorUUID;
+import com.xiaokaige.utils.SnowUtil;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 
 /**
  * @author zengkai
  * @date 2021/6/24 15:59
  */
+@SpringBootTest
+@RunWith(SpringRunner.class)
 public class ArithmeticTest {
     public static void main(String[] args) {
         int[] arr = {1, 3, 5};
@@ -54,6 +63,25 @@ public class ArithmeticTest {
             System.out.println(number);
         }
     }
+
+
+    @Test
+    public void test111(){
+        for (int i = 0; i < 200; i++) {
+            System.out.println(GeneratorUUID.getUUID());
+        }
+    }
+
+    @Test
+    public void test12(){
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Date date = new Date();
+        long dateTimeLong = date.getTime();
+        long localDateTimeLong = localDateTime.toInstant(ZoneOffset.ofHours(8)).toEpochMilli();
+        System.out.println(dateTimeLong);
+        System.out.println(localDateTimeLong);
+    }
+
 
 
 }

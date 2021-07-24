@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -23,7 +24,7 @@ public class UserParam {
     @ApiModelProperty(value = "用户年龄",required = true)
     private Integer age;
 
-    @NotNull
     @ApiModelProperty(value = "用户住址",required = true)
+    @NotBlank
     private String address;
 }

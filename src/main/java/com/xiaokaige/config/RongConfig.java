@@ -6,16 +6,13 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author zengkai
- * @date 2021/6/30 17:30
+ * @date 2021/7/2 8:56
  */
-@Component
-@ConfigurationProperties(prefix = "stl.project")
+@ConfigurationProperties(prefix = "rongcloud.im")
 @Data
-public class StlConfig {
+@Component
+public class RongConfig {
+    private String appKey;
 
-    private String flag;
-
-    private Long projectId;
-
-    private Long envId;
+    private String appSecret;
 }

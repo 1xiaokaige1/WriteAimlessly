@@ -1,3 +1,4 @@
+/*
 package com.xiaokaige.controller;
 
 import com.alibaba.fastjson.JSONObject;
@@ -21,18 +22,20 @@ import java.util.Map;
 @RequestMapping("/v1/api/user")
 @CrossOrigin
 public class UserController{
-    
+
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-	
+
 	@Autowired
 	private UserService userService;
-	
-	/**
+
+	*/
+/**
 	 * 根据userId,userName获取token
 	 * @param userId
 	 * @param userName
 	 * @return
-	 */
+	 *//*
+
     @GetMapping("/getToken")
     public String getToken(String userId,String userName) {
     	logger.info("enter into getToken function......");
@@ -53,7 +56,7 @@ public class UserController{
 		}
     	return responseJson("00","请求成功",result);
     }
-    
+
 	public String responseJson(String code,String msg,Object obj){
     	Map<String, Object> res = new HashMap<>();
 		res.put("code", code);
@@ -67,3 +70,4 @@ public class UserController{
 		return ret;
 	}
 }
+*/

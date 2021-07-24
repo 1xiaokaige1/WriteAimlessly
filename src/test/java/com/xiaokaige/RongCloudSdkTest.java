@@ -1,25 +1,27 @@
 package com.xiaokaige;
 
-import cn.hutool.crypto.digest.MD5;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.xiaokaige.service.GroupInfoService;
 import com.xiaokaige.service.UserTokenService;
 import com.xiaokaige.utils.IdUtil;
 import io.rong.RongCloud;
-import io.rong.messages.BaseMessage;
 import io.rong.messages.TxtMessage;
 import io.rong.messages.UserInfo;
 import io.rong.methods.group.Group;
 import io.rong.methods.group.gag.Gag;
+import io.rong.methods.message._private.Private;
 import io.rong.methods.user.User;
 import io.rong.methods.user.blacklist.Blacklist;
 import io.rong.methods.user.block.Block;
+import io.rong.methods.user.chat.Ban;
 import io.rong.methods.user.whitelist.Whitelist;
 import io.rong.models.Result;
 import io.rong.models.group.GroupMember;
 import io.rong.models.group.GroupModel;
 import io.rong.models.message.GroupMessage;
+import io.rong.models.message.PrivateMessage;
 import io.rong.models.response.*;
+import io.rong.models.user.BanListModel;
+import io.rong.models.user.BanModel;
 import io.rong.models.user.UserModel;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,10 +32,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author zengkai
@@ -53,11 +52,11 @@ public class RongCloudSdkTest {
     /**
      * appKey
      */
-    private static final String appKey = "c9kqb3rdc6thj";
+    private static final String appKey = "x4vkb1qpxw1tk";
     /**
      * appSecret
      */
-    private static final String appSecret = "OPxgxvq7ZqT3";
+    private static final String appSecret = "ReUgbEyd95T";
 
     private RongCloud rongCloud;
 
@@ -73,6 +72,10 @@ public class RongCloudSdkTest {
 
     private Gag gag;
 
+    private Private _private;
+
+    private Ban ban;
+
     @Before
     public void before() {
         rongCloud = RongCloud.getInstance(appKey, appSecret);
@@ -82,6 +85,8 @@ public class RongCloudSdkTest {
         whitelist = new Whitelist(appKey, appSecret, rongCloud);
         group = rongCloud.group;
         gag = rongCloud.group.gag;
+        _private = rongCloud.message.msgPrivate;
+        ban = rongCloud.user.ban;
     }
 
     /**
@@ -94,8 +99,7 @@ public class RongCloudSdkTest {
         String userId = IdUtil.getUUID();
         UserModel userModel = new UserModel()
                 .setId(userId)
-                .setName("niujiahuan")
-                .setPortrait("http://www.rongcloud.cn/images/logo.png");
+                .setName("test_002");
         TokenResult result = user.register(userModel);
         String token = result.getToken();
         userTokenService.insertUserToken(userId, token);
@@ -410,6 +414,11 @@ public class RongCloudSdkTest {
         System.out.println("resultList: " + resultList);
     }
 
+    /**
+     * 发送消息
+     *
+     * @throws Exception
+     */
     @Test
     public void test22() throws Exception {
         GroupMessage groupMessage = new GroupMessage();
@@ -427,17 +436,63 @@ public class RongCloudSdkTest {
 
     @Test
     public void test23() {
-        Map<String, List<String>> map = new HashMap<>();
+        /*Map<String, List<String>> map = new HashMap<>();
         List<String> listOne = new ArrayList<>();
         listOne.add("1");
         listOne.add("2");
         map.put("one", listOne);
         redisTemplate.opsForHash().putAll("userOne", map);
-
         Map<String,List<String>> mapResult = redisTemplate.opsForHash().entries("userOne");
-        System.out.println(mapResult);
+        listOne.add("3");
+        redisTemplate.opsForHash().put("userOne","one",listOne);*/
+
+        List<String> listTwo = new ArrayList<>();
+        listTwo.add("666");
+        //redisTemplate.opsForHash().put("userOne","one",listTwo);
+        redisTemplate.opsForHash().delete("userOne", "one");
+        //System.out.println(mapResult);
+    }
+
+    @Test
+    public void test24() throws Exception {
+
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId("68222fed-6c12-48bb-9ac9-6ad4f335412e");
+        userInfo.setName("test_001");
+        userInfo.setIcon("");
+        userInfo.setExtra("");
+
+        TxtMessage txtMessage = new TxtMessage("hello world", "", userInfo);
+
+        PrivateMessage privateMessage = new PrivateMessage()
+                .setSenderId("68222fed-6c12-48bb-9ac9-6ad4f335412e")
+                .setTargetId(new String[]{"39fc12fc-0314-4ded-b714-77ebad32cfc6"})
+                .setObjectName("RC:TxtMsg")
+                .setContent(txtMessage);
+
+        ResponseResult result = _private.send(privateMessage);
+        System.out.println(result);
+    }
+
+    @Test
+    public void test25() throws Exception {
+        BanModel banModel = new BanModel();
+        banModel.setState(1)
+                .setUserId(new String[]{"68222fed-6c12-48bb-9ac9-6ad4f335412e"})
+                .setType("PERSON");
+        Result result = ban.set(banModel);
+        System.out.println(result);
 
 
+    }
+
+
+    @Test
+    public void test26() throws Exception {
+        BanListModel banListModel = new BanListModel();
+        banListModel.setNum(100).setOffset(0).setType("PERSON");
+        BanListResult list = ban.getList(banListModel);
+        System.out.println(list);
     }
 
 
