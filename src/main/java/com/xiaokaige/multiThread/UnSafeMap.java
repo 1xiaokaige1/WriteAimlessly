@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class UnSafeMap {
     public static void main(String[] args) {
-            Container container = new Container();
+        Container container = new Container();
         new Thread(() -> {
             Integer service = container.service(2);
             System.out.println("one: " + service);
