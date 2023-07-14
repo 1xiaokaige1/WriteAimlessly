@@ -19,4 +19,6 @@ public class CollectStreamTest {
         long count = list.stream().count();
         System.out.println(count);
     }
+
+
 }

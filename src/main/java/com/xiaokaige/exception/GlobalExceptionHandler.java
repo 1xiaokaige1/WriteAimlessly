@@ -29,8 +29,16 @@ import java.io.IOException;
 @Slf4j
 public class GlobalExceptionHandler {
 
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseInfo<?> businessExceptionHandler(BusinessException businessException) {
+        businessException.printStackTrace();
+        return errorResponse(businessException.getSubCodeEnum().getDesc(), businessException.getSubCodeEnum());
+    }
+
     /**
      * 未知异常
+     *
      * @param exception 异常信息
      * @return R
      */
@@ -51,7 +59,7 @@ public class GlobalExceptionHandler {
     public ResponseInfo<?> runtimeExceptionHandler(RuntimeException exception) {
         exception.printStackTrace();
         log.error(exception.getLocalizedMessage());
-        return  errorResponse("运行时异常：" + exception.getLocalizedMessage(),
+        return errorResponse("运行时异常：" + exception.getLocalizedMessage(),
                 SystemSubCode.RUNTIME_EXCEPTION);
     }
 
@@ -173,7 +181,7 @@ public class GlobalExceptionHandler {
     /**
      * 返回错误消息
      *
-     * @param msg 信息
+     * @param msg     信息
      * @param subCode 状态码
      * @return R
      */

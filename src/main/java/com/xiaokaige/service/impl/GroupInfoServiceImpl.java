@@ -1,10 +1,12 @@
 package com.xiaokaige.service.impl;
 
-import com.xiaokaige.entity.GroupInfoDO;
-import com.xiaokaige.dao.GroupInfoMapper;
-import com.xiaokaige.service.GroupInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.apache.tomcat.jni.Local;
+import com.xiaokaige.dao.GroupInfoMapper;
+import com.xiaokaige.entity.GroupInfoDO;
+import com.xiaokaige.exception.BusinessException;
+import com.xiaokaige.exception.GroupExceptionEnum;
+import com.xiaokaige.response.ResponseInfo;
+import com.xiaokaige.service.GroupInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +43,10 @@ public class GroupInfoServiceImpl extends ServiceImpl<GroupInfoMapper, GroupInfo
         groupInfoDO.setGroupName(groupName);
         groupInfoDO.setUpdateTime(LocalDateTime.now());
         groupInfoMapper.updateById(groupInfoDO);
+    }
+
+    @Override
+    public ResponseInfo<?> testException() {
+        throw new BusinessException(GroupExceptionEnum.GROUP_NOT_EXIST);
     }
 }

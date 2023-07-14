@@ -1,3 +1,4 @@
+/*
 package com.xiaokaige.generatorid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,3 +23,4 @@ public class GeneratorUUID {
         return snowFlakeTwo.nextId();
     }
 }
+*/

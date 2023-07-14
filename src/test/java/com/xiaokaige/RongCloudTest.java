@@ -23,8 +23,8 @@ import java.util.List;
  */
 public class RongCloudTest {
 
-    private String appKey = "lmxuhwagl6d3d";
-    private String appSecret = "4kC8oxGLyhNA";
+    private String appKey = "x18ywvqfx4vec";
+    private String appSecret = "DaG1zM3RjJ";
 
     RongCloud rongCloud = RongCloud.getInstance(appKey, appSecret);
     private User user;
@@ -122,6 +122,11 @@ public class RongCloudTest {
                 .setPortrait("http://www.rongcloud.cn/images/logo.png");
         TokenResult result = user.register(userModel);
         System.out.println(result);
+    }
+
+    @Test
+    public void test009(){
+
     }
 
 

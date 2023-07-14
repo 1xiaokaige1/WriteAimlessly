@@ -61,5 +61,9 @@ public class IMCallBackApiController {
         logger.info("callBackEvent function endTime:{}", System.currentTimeMillis());
         return ret;
     }
+
+	public static void main(String[] args) {
+
+	}
  
 }

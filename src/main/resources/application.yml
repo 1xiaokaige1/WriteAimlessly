@@ -1,19 +1,36 @@
 server:
-  port: 9020
+  port: 9060
 # 数据库配置
 spring:
   datasource:
     druid:
+      url: jdbc:mysql://192.168.7.84:3306/fxchat_test?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+      username: fxchat_user
+      password: 123456
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/rongcloudtestdatabase?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
-      username: root
-      password: root
+  redis:
+    database: 200
+    host: 192.168.7.85
+    port: 6379
+    password: Aa123456
+  kafka:
+    bootstrap-servers: 192.168.1.56:9092
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+
 swagger:
   enabled: true
-rongcloud:
+rongCloud:
   im:
-    appKey: x4vkb1qpxw1tk
-    appSecret: ReUgbEyd95T
+    appKey: m7ua80gbmzqzm
+    appSecret: DGnZ8Z9SDdqXHc
+    apiDomain: http://api-sg01.ronghub.com
+    projectId: 5
+    environmentId: 2
 stl:
   project:
     flag: hk

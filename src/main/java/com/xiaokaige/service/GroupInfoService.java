@@ -2,6 +2,7 @@ package com.xiaokaige.service;
 
 import com.xiaokaige.entity.GroupInfoDO;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xiaokaige.response.ResponseInfo;
 
 /**
  * <p>
@@ -16,4 +17,6 @@ public interface GroupInfoService extends IService<GroupInfoDO> {
     void insertGroupInfo(String groupId, String groupName);
 
     void updateGroupInfo(String groupId, String groupName);
+
+    ResponseInfo<?> testException();
 }

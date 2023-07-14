@@ -1,7 +1,9 @@
 package com.xiaokaige;
 
+import com.stl.util.STLJsonUtils;
 import com.xiaokaige.service.GroupInfoService;
 import com.xiaokaige.service.UserTokenService;
+import com.xiaokaige.utils.HttpRequestUtils;
 import com.xiaokaige.utils.IdUtil;
 import io.rong.RongCloud;
 import io.rong.messages.TxtMessage;
@@ -29,10 +31,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author zengkai
@@ -47,7 +50,9 @@ public class RongCloudSdkTest {
     @Autowired
     private GroupInfoService groupInfoService;
     @Autowired
-    private RedisTemplate redisTemplate;
+    private StringRedisTemplate redisTemplate;
+    @Autowired
+    private HttpRequestUtils httpRequestUtils;
 
     /**
      * appKey
@@ -493,6 +498,31 @@ public class RongCloudSdkTest {
         banListModel.setNum(100).setOffset(0).setType("PERSON");
         BanListResult list = ban.getList(banListModel);
         System.out.println(list);
+    }
+
+    @Test
+    public void test006() {
+        UserLangDTO userLangDTO = new UserLangDTO();
+        userLangDTO.setCloudUserId("612706558987212527");
+        userLangDTO.setLang(1);
+        userLangDTO.setUserId(1007245L);
+        redisTemplate.opsForHash().put("user_lang", "1007245", STLJsonUtils.obj2json(userLangDTO));
+    }
+
+    @Test
+    public void test007() throws InterruptedException {
+        Map<String, String> map = new HashMap<>();
+        map.put("uid", "16792");
+        map.put("swagger", "1");
+        for (int i = 0; i < 10; i++) {
+            new Thread(() -> {
+                String acquireResponse = httpRequestUtils.getWithHeader("http://192.168.1.56:8030/api/testAcquire", null, map);
+                String releaseResponse = httpRequestUtils.postWithHeader("http://192.168.1.56:8030/api/releaseAcquire", null, map);
+                System.out.println("acquireResponse = " + acquireResponse);
+                System.out.println("releaseResponse = " + releaseResponse);
+            }).start();
+        }
+        Thread.sleep(10000);
     }
 
 

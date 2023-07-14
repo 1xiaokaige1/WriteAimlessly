@@ -3,6 +3,8 @@ package com.xiaokaige.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -15,10 +17,10 @@ import lombok.experimental.Accessors;
  * @author zk
  * @since 2021-06-24
  */
-@Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("user_info")
+@TableName("user_token")
+@Data
 public class UserInfoDO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,6 +36,46 @@ public class UserInfoDO implements Serializable {
     private String token;
 
     private String nickname;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
 
     /**
      * 用户头像
@@ -60,12 +102,12 @@ public class UserInfoDO implements Serializable {
     /**
      * 更新时间
      */
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private Date createTime;
 
 
 }

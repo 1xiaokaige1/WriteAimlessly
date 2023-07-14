@@ -3,12 +3,10 @@ package com.xiaokaige.aware;
 import com.xiaokaige.annotataion.StrategyAno;
 import com.xiaokaige.enums.TestCodeEnum;
 import com.xiaokaige.interfacedemo.InterfaceDemo;
-import io.swagger.models.auth.In;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 import java.util.Arrays;
 import java.util.EnumMap;

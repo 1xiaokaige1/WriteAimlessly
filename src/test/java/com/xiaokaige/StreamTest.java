@@ -1,8 +1,17 @@
+/*
 package com.xiaokaige;
 
 import cn.hutool.crypto.digest.MD5;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.xiaokaige.config.StlConfig;
+import com.xiaokaige.dao.UserMapper;
 import com.xiaokaige.entity.Dish;
+import com.xiaokaige.entity.StudentDO;
+import com.xiaokaige.entity.UserInfoDO;
+import io.rong.messages.UserInfo;
+import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,16 +19,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+*/
 /**
  * @author zengkai
  * @date 2021/6/18 14:02
- */
+ *//*
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class StreamTest {
@@ -88,30 +105,44 @@ public class StreamTest {
     @Test
     public void test04() {
         //使用流进行数据拼接
-        /*String allDishNameStr = list.stream().map(Dish::getName).collect(Collectors.joining(","));
-        System.out.println(allDishNameStr);*/
+        */
+/*String allDishNameStr = list.stream().map(Dish::getName).collect(Collectors.joining(","));
+        System.out.println(allDishNameStr);*//*
 
-        /*boolean flag = list.stream().noneMatch(dish -> dish.getCalories() > 1000);
-        System.out.println("flag: " + flag);*/
 
-        /*Optional<Dish> optionResult = list.stream().filter(dish -> "meat".equals(dish.getName())).findAny();
-        optionResult.ifPresent(System.out::println);*/
+        */
+/*boolean flag = list.stream().noneMatch(dish -> dish.getCalories() > 1000);
+        System.out.println("flag: " + flag);*//*
 
-        /*Integer countResult = list.stream().map(Dish::getCalories).reduce(Integer::sum).get();
-        System.out.println("countResult: " + countResult);*/
 
-        /*Integer sumCalories = list.stream().map(Dish::getCalories).reduce(0, Integer::sum);
-        System.out.println("sumCalories: " + sumCalories );*/
+        */
+/*Optional<Dish> optionResult = list.stream().filter(dish -> "meat".equals(dish.getName())).findAny();
+        optionResult.ifPresent(System.out::println);*//*
 
-        /*int result = list.stream().mapToInt(Dish::getCalories).sum();
-        System.out.println("result: " + result);*/
+
+        */
+/*Integer countResult = list.stream().map(Dish::getCalories).reduce(Integer::sum).get();
+        System.out.println("countResult: " + countResult);*//*
+
+
+        */
+/*Integer sumCalories = list.stream().map(Dish::getCalories).reduce(0, Integer::sum);
+        System.out.println("sumCalories: " + sumCalories );*//*
+
+
+        */
+/*int result = list.stream().mapToInt(Dish::getCalories).sum();
+        System.out.println("result: " + result);*//*
+
 
         OptionalInt maxData = list.stream().mapToInt(Dish::getCalories).max();
         int realMaxData = maxData.orElse(1500);
         System.out.println("realMaxData: " + realMaxData);
 
-        /*Dish dish = list.stream().reduce((a, b) -> a.getCalories() > b.getCalories() ? a : b).get();
-        System.out.println(dish);*/
+        */
+/*Dish dish = list.stream().reduce((a, b) -> a.getCalories() > b.getCalories() ? a : b).get();
+        System.out.println(dish);*//*
+
 
         List<Dish[]> list = this.list.stream().flatMap(i -> this.list.stream().map(j -> new Dish[]{i, j})).collect(Collectors.toList());
         System.out.println(list);
@@ -174,8 +205,10 @@ public class StreamTest {
 
     @Test
     public void test08() {
-       /*Map<Boolean, List<Dish>> resultMap = list.stream().collect(Collectors.partitioningBy(Dish::isVegetarian));
-        System.out.println(resultMap);*/
+       */
+/*Map<Boolean, List<Dish>> resultMap = list.stream().collect(Collectors.partitioningBy(Dish::isVegetarian));
+        System.out.println(resultMap);*//*
+
 
         Map<String, Dish> resultMapTwo = list.stream().collect(Collectors.toMap(Dish::getType, Function.identity()));
     }
@@ -205,4 +238,72 @@ public class StreamTest {
         System.out.println("生成的融云id: " + uid);
     }
 
+    @Test
+    public void test222() {
+        File file = new File("image");
+        String path = file.getAbsolutePath();
+        System.out.println("path = " + path);
+    }
+
+    @Test
+    public void test333() {
+        StudentDO studentDOOne = new StudentDO();
+        studentDOOne.setId(1L);
+        StudentDO studentDOTwo = new StudentDO();
+        studentDOTwo.setId(2L);
+        swapStudent(studentDOOne, studentDOTwo);
+        System.out.println("studentDOOne = " + studentDOOne);
+        System.out.println("studentDOTwo = " + studentDOTwo);
+    }
+
+    private void swapStudent(StudentDO x, StudentDO y) {
+        StudentDO tmp = x;
+        x = y;
+        y = tmp;
+    }
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Test
+    public void test444() {
+        UserInfoDO userInfoDO = new UserInfoDO();
+        int update = userMapper.update(userInfoDO, new LambdaUpdateWrapper<UserInfoDO>().eq(UserInfoDO::getToken, userInfoDO.getToken()));
+        System.out.println("update = " + update);
+    }
+
+    @Autowired
+    private KfkService kfkService;
+
+    @Test
+    public void test0000() {
+        kfkService.sendMsg("topic1", "fsdfsdf");
+    }
+
+    @Test
+    public void test() {
+        for (int i = 0; i < 2; i++) {
+            System.out.println("循环次数" + i);
+            int a = 3;
+            switch (a) {
+                case 1:
+                    System.out.println("1");
+                    break;
+                default:
+                    break;
+            }
+
+        }
+    }
+
+    @Test
+    public void test87(){
+        ExecutorService exec = Executors.newFixedThreadPool(100);
+        exec.execute(()-> System.out.println("测试一下"));
+        Map<String, Object> map = new HashMap<>();
+        List<String> list = new ArrayList<>();
+        map.computeIfAbsent("A", key->new ArrayList<>());
+    }
+
 }
+*/
